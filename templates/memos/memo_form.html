@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if form.instance.pk %}메모 수정{% else %}메모 작성{% endif %} - 메모짱
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    {% if form.instance.pk %}
+                        ✏️ 메모 수정
+                    {% else %}
+                        ✍️ 새 메모 작성
+                    {% endif %}
+                </h2>
+                
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            {% if form.instance.pk %}
+                                수정하기
+                            {% else %}
+                                작성하기
+                            {% endif %}
+                        </button>
+                        <a href="{% url 'memos:list' %}" class="btn btn-secondary">
+                            취소
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

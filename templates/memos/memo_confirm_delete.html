@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}메모 삭제 확인 - 메모짱{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0">🗑️ 메모 삭제 확인</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>경고!</strong> 이 작업은 되돌릴 수 없습니다.
+                </div>
+                
+                <h5>다음 메모를 정말 삭제하시겠습니까?</h5>
+                <div class="card mt-3">
+                    <div class="card-body bg-light">
+                        <h6 class="card-title">{{ memo.title }}</h6>
+                        <p class="card-text text-muted">
+                            {{ memo.content|truncatewords:30 }}
+                        </p>
+                        <small class="text-muted">
+                            작성일: {{ memo.created_at|date:"Y-m-d H:i" }}
+                        </small>
+                    </div>
+                </div>
+                
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger delete-confirm">
+                            삭제하기
+                        </button>
+                        <a href="{% url 'memos:detail' memo.pk %}" class="btn btn-secondary">
+                            취소
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}내 메모 - 메모짱{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📝 내 메모</h2>
+            <a href="{% url 'memos:create' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> 새 메모 작성
+            </a>
+        </div>
+        
+        {% if memos %}
+            <div class="row">
+                {% for memo in memos %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card memo-card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ memo.title }}</h5>
+                                <p class="card-text text-muted">
+                                    {{ memo.content|truncatewords:20 }}
+                                </p>
+                                <div class="text-muted small mb-3">
+                                    <i class="bi bi-clock"></i> {{ memo.created_at|date:"Y-m-d H:i" }}
+                                </div>
+                                <div class="btn-group w-100" role="group">
+                                    <a href="{% url 'memos:detail' memo.pk %}" class="btn btn-outline-primary btn-sm">
+                                        상세보기
+                                    </a>
+                                    <a href="{% url 'memos:update' memo.pk %}" class="btn btn-outline-secondary btn-sm">
+                                        수정
+                                    </a>
+                                    <a href="{% url 'memos:delete' memo.pk %}" class="btn btn-outline-danger btn-sm">
+                                        삭제
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- 페이지네이션 -->
+            {% if is_paginated %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">처음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">마지막</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info text-center">
+                <h4>메모가 없습니다.</h4>
+                <p>첫 번째 메모를 작성해보세요!</p>
+                <a href="{% url 'memos:create' %}" class="btn btn-success mt-2">
+                    메모 작성하기
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
